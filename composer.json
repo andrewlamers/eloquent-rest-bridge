@@ -1,0 +1,29 @@
+{
+  "name": "andrewlamers/eloquent-rest-bridge",
+  "description": "A connection driver that forwards sql statements over HTTP and returns the data back into an eloquent model.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrew Lamers",
+      "email": "andrew.lamers@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "guzzlehttp/guzzle": "~6",
+    "illuminate/support": "^5.1",
+    "illuminate/container": "^5.1",
+    "illuminate/database": "^5.1",
+    "illuminate/events": "^5.1",
+    "illuminate/encryption": "^5.1",
+    "illuminate/http": "^5.1",
+    "illuminate/console": "^5.1",
+    "illuminate/routing": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Andrewlamers\\EloquentRestBridge\\": "src/"
+    }
+  }
+}
