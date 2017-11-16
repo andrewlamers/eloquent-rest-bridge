@@ -3,6 +3,7 @@
 namespace Andrewlamers\EloquentRestBridge\Request;
 
 use Andrewlamers\EloquentRestBridge\Exceptions\RestException;
+use Andrewlamers\EloquentRestBridge\Logger\Log;
 use GuzzleHttp\Client;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Str;
@@ -19,7 +20,8 @@ class Request
         $this->config->set('rest-bridge', array_merge($this->config->get('rest-bridge'), ['request' => $config]));
 
         $this->encrypter = new Encrypter($this->getKey(), $this->config->get('rest-bridge.encryption.cipher'));
-        $this->client = new Client(['timeout' => 5]);
+        $this->client = new Client([]);
+        $this->log = new Log();
     }
 
     public function getKey()
@@ -31,6 +33,18 @@ class Request
         }
 
         return $key;
+    }
+
+    public function trimWhitespace($data) {
+        if($this->config->get('rest-bridge.trim-whitespace', true) !== false) {
+            array_walk_recursive($data, function(&$item) {
+                if(!is_array($item)) {
+                    $item = trim($item);
+                }
+            });
+        }
+
+        return $data;
     }
 
     public function compress($payload)
@@ -63,16 +77,21 @@ class Request
         $uri .= '/_rest_bridge/handler';
 
         $options = [
-            'body'    => $body,
             'headers' => [
                 'Accept-encoding' => 'None',
                 'Content-type' => 'application/octet-stream'
             ]
         ];
 
-        $response = $this->client->request('POST', $uri, $options);
+        $request = new \GuzzleHttp\Psr7\Request('POST', $uri, $options, $body);
+
+        $this->log->request($request);
+
+        $response = $this->client->send($request);
 
         $data = $response->getBody()->getContents();
+
+        $this->log->response($response);
 
         return $this->parsePayload($data);
     }
@@ -100,6 +119,8 @@ class Request
             $exception = array_get($data, 'exception');
             throw new RestException(array_get($exception, 'message'));
         }
+
+        $data = $this->trimWhitespace($data);
 
         return $data;
     }

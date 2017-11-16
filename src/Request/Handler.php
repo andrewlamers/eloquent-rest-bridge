@@ -2,11 +2,11 @@
 
 namespace Andrewlamers\EloquentRestBridge\Request;
 
+use Andrewlamers\EloquentRestBridge\Logger\Log;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Log;
 
 class Handler
 {
@@ -17,6 +17,7 @@ class Handler
         $this->connectionFactory = new ConnectionFactory(app());
         $this->config = $config;
         $this->appConfig = app('config');
+        $this->log = new Log();
     }
 
     public function getPdo($config)
@@ -41,6 +42,8 @@ class Handler
             $bindings = $options->get('bindings');
             $type = $options->get('type');
             $results = NULL;
+
+            $this->log->query(['query' => $query, 'bindings' => $bindings, 'type' => $type, 'config' => array_except($config, ['proxied.password', 'password'])]);
 
             switch ($type) {
                 case "select":
