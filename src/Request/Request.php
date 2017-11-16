@@ -4,10 +4,7 @@ namespace Andrewlamers\EloquentRestBridge\Request;
 
 use Andrewlamers\EloquentRestBridge\Exceptions\RestException;
 use GuzzleHttp\Client;
-use function GuzzleHttp\Psr7\stream_for;
 use Illuminate\Encryption\Encrypter;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Request
@@ -15,9 +12,6 @@ class Request
     protected $config;
     protected $client;
     protected $encrypter;
-    protected $_encrypt;
-    protected $_compress;
-    protected $_encoding;
 
     public function __construct(array $config = [])
     {

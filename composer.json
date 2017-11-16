@@ -1,6 +1,6 @@
 {
   "name": "andrewlamers/eloquent-rest-bridge",
-  "description": "A connection driver that forwards sql statements over HTTP and returns the data back into an eloquent model.",
+  "description": "A connection driver for eloquent that forwards sql statements over HTTP and returns the data back into an eloquent model.",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -20,6 +20,9 @@
     "illuminate/http": "^5.1",
     "illuminate/console": "^5.1",
     "illuminate/routing": "^5.1"
+  },
+  "require-dev": {
+
   },
   "autoload": {
     "psr-4": {
