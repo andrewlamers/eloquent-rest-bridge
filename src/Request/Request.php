@@ -26,7 +26,7 @@ class Request
 
     public function getKey()
     {
-        $key = $this->config->get('rest-bridge.encryption.key');
+        $key = env($this->config->get('rest-bridge.encryption.key'));
 
         if (Str::startsWith($key, 'base64:')) {
             $key = base64_decode(substr($key, 7));

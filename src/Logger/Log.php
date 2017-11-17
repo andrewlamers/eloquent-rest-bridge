@@ -11,20 +11,29 @@ class Log
     protected $queryLog;
     protected $requestLog;
     protected $responseLog;
-    protected $enabled = true;
+    protected $config;
 
-    public function __construct($enabled = true) {
+    public function __construct() {
 
-        $this->enabled = $enabled;
+        $this->config = app('config')->get('rest-bridge.log');
+        $this->enabled = $this->config['enabled'];
 
         $this->queryLog = new Logger('query');
-        $this->queryLog->pushHandler(new StreamHandler(storage_path('logs/eloquent-rest-handler-query.log')), Logger::DEBUG);
+        $this->queryLog->pushHandler(new StreamHandler($this->getLogPath('query')), Logger::DEBUG);
 
         $this->requestLog = new Logger('request');
-        $this->requestLog->pushHandler(new StreamHandler(storage_path('logs/eloquent-rest-handler-request.log')), Logger::DEBUG);
+        $this->requestLog->pushHandler(new StreamHandler($this->getLogPath('request')), Logger::DEBUG);
 
         $this->responseLog = new Logger('response');
-        $this->responseLog->pushHandler(new StreamHandler(storage_path('logs/eloquent-rest-handler-response.log')), Logger::DEBUG);
+        $this->responseLog->pushHandler(new StreamHandler($this->getLogPath('response')), Logger::DEBUG);
+    }
+
+    public function getLogPath($file) {
+        $file = 'eloquent-rest-bridge-'.$file.".log";
+        $path = array_filter(explode(DIRECTORY_SEPARATOR, array_get($this->config, 'base_path')));
+        $path[] = $file;
+
+        return "/".implode(DIRECTORY_SEPARATOR, $path);
     }
 
     public function log($type, $message, $level) {
