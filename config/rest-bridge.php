@@ -26,7 +26,12 @@ return array(
         /*
          * Base path for the log files. It will create 3 log files for requests, responses, and sql queries.
          */
-        'base_path' => storage_path('logs/')
+        'base_path' => storage_path('logs/'),
+        'queries' => [
+            'select',
+            'update',
+            'delete'
+        ]
     ],
     'daemon' => [
         'enabled' => false,

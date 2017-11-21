@@ -43,7 +43,9 @@ class Log
     }
 
     public function query($query, $level = Logger::DEBUG) {
-        $this->log("query", json_encode($query), $level);
+        if(in_array($query['type'], $this->config['queries'])) {
+            $this->log("query", json_encode($query), $level);
+        }
     }
 
     public function request($request, $level = Logger::DEBUG) {

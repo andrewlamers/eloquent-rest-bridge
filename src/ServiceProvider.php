@@ -42,13 +42,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $configPath = __DIR__ . '/../config/rest-bridge.php';
         $this->publishes([$configPath => config_path('rest-bridge.php')], 'config');
 
-        $routeConfig = ['namespace' => 'Andrewlamers\EloquentRestBridge\Controllers'];
-        $this->app['router']->group($routeConfig, function ($router) {
-            $router->post('/'.config('rest-bridge.daemon.route'), [
-                'uses' => 'RestController@handler',
-                'as'   => 'rest-bridge.handler'
-            ]);
-        });
+        if(config('rest-bridge.daemon.enabled')) {
+            $routeConfig = ['namespace' => 'Andrewlamers\EloquentRestBridge\Controllers'];
+            $this->app['router']->group($routeConfig, function ($router) {
+                $router->post('/' . config('rest-bridge.daemon.route'), [
+                    'uses' => 'RestController@handler',
+                    'as'   => 'rest-bridge.handler'
+                ]);
+            });
+        }
     }
 
     public function provides()

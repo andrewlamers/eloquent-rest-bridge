@@ -83,17 +83,22 @@ class Request
             ]
         ];
 
+        $data = null;
         $request = new \GuzzleHttp\Psr7\Request('POST', $uri, $options, $body);
 
         $this->log->request($request);
 
-        $response = $this->client->send($request);
+        try {
+            $response = $this->client->send($request);
 
-        $data = $response->getBody()->getContents();
+            $data = $response->getBody()->getContents();
 
-        $this->log->response($response);
+            $this->log->response($response);
 
-        return $this->parsePayload($data);
+            return $this->parsePayload($data);
+        } catch(\Exception $e) {
+            throw new RestException("Error retrieving results from server. ".$e->getMessage());
+        }
     }
 
     public function preparePayload($payload)

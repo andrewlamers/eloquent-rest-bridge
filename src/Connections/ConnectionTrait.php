@@ -38,7 +38,7 @@ trait ConnectionTrait
         if (count($data['results']) < 1) {
             return NULL;
         }
-
+        
         $this->logQuery($query, $bindings, $this->getElapsedTime($start));
 
         return $data['results'];
