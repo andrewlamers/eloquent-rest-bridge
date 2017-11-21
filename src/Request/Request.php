@@ -101,8 +101,19 @@ class Request
         }
     }
 
+    public function getMetadata() {
+        $metadata = $this->config->get('rest-bridge.request_metadata');
+        if($metadata instanceof \Closure) {
+            return $metadata();
+        }
+
+        return $metadata;
+    }
+
     public function preparePayload($payload)
     {
+        $payload['metadata'] = $this->getMetadata();
+
         $data = json_encode($payload);
 
         $data = $this->compress($data);

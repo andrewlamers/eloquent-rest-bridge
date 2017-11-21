@@ -36,5 +36,8 @@ return array(
     'daemon' => [
         'enabled' => false,
         'route' => '_rest_bridge/handler'
-    ]
+    ],
+    'request_metadata' => function() {
+        
+    }
 );

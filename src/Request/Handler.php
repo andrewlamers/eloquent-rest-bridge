@@ -43,7 +43,11 @@ class Handler
             $type = $options->get('type');
             $results = NULL;
 
-            $this->log->query(['query' => $query, 'bindings' => $bindings, 'type' => $type, 'config' => array_except($config, ['proxied.password', 'password'])]);
+            $this->log->query(['query' => $query,
+                               'bindings' => $bindings,
+                               'type' => $type,
+                               'metadata' => $options->get('metadata'),
+                               'config' => array_except($config, ['proxied.password', 'password'])]);
 
             switch ($type) {
                 case "select":
