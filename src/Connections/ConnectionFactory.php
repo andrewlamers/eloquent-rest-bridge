@@ -32,7 +32,7 @@ class ConnectionFactory
         $config = $this->proxyConnection->getConfig();
         $this->config['proxied'] = $config;
         $database = $this->proxyConnection->getDatabaseName();
-        $pdo = new \PDO('sqlite::memory');
+        $pdo = new \PDO('sqlite::memory:');
         $prefix = $this->proxyConnection->getTablePrefix();
 
         switch ($config['driver']) {
