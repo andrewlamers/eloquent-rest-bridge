@@ -35,7 +35,7 @@ trait ConnectionTrait
 
         $data = $this->http->request($data);
 
-        if (count($data['results']) < 1) {
+        if (!is_array($data['results']) || count($data['results']) < 1) {
             return NULL;
         }
         
